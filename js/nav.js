@@ -33,9 +33,12 @@ function updateNavOnLogin() {
   $navLogin.hide();
   $navLogOut.show();
   $navNewStory.show();
+  $navFavStories.show();
   $navUserProfile.text(`${currentUser.username}`).show();
 }
 
+
+// brings up the page for a user to submit their story
 function navSubmitClick(evt){
   console.debug("navSubmitClick")
   hidePageComponents();
@@ -43,3 +46,12 @@ function navSubmitClick(evt){
 }
 
 $navNewStory.on("click", navSubmitClick);
+
+// hides all stories and shows only user favorite stories
+function showFavoriteStories(evt){
+  console.debug("showFavoriteStories");
+  hidePageComponents();
+  $favStoriesList.show();
+}
+
+$navFavStories.on("click", showFavoriteStories);

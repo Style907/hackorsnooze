@@ -82,8 +82,8 @@ class StoryList {
         token: `${currentUser.loginToken}`,
         story: {title, author, url},
       });
-
-      return new Story({title, author, url})
+      console.log(response)
+      return new Story({title, author, url, storyId: response.data.story.storyId })
     
     
     
@@ -215,4 +215,38 @@ class User {
       return null;
     }
   }
+// sends post request to api to add clicked story to favorites
+
+
+  static async addFavStory(id){
+    const response = await axios.post(
+      `https://hack-or-snooze-v3.herokuapp.com/users/${currentUser.username}/favorites/${id}`,
+      {
+        token: `${currentUser.loginToken}`,
+      });
+      currentUser.favorites = []
+      for(let story of response.data.user.favorites){
+      currentUser.favorites.push( new Story(story))}
+      putFavStoriesOnPage()
+
+
+  }
+
+  // sends delete request to api,updates the dom
+  static async removeStory(id){
+    const response = await axios({
+      url:`https://hack-or-snooze-v3.herokuapp.com/users/${currentUser.username}/favorites/${id}`,
+      method: "DELETE",
+       params:{ token: `${currentUser.loginToken}`},
+  });
+      currentUser.favorites = []
+      for(let story of response.data.user.favorites){
+      currentUser.favorites.push(new Story(story))}
+      putFavStoriesOnPage()
+      
+  }
+  
+
 }
+
+

@@ -41,6 +41,7 @@
     <a class="nav-link" href="#" id="nav-login">login/signup</a>
     <a class="nav-link" href="#" id="nav-user-profile"></a>
     <a class="hidden" id="nav-new-story" href="#"><small>Submit</small></a>
+    <a class="hidden" id="nav-fav-stories" href="#"><small>Favorites</small></a>
     <a class="hidden" id="nav-logout" href="#"><small>(logout)</small></a>
   </div>
 </nav>
@@ -53,6 +54,9 @@
 
   <!-- List of all stories -->
   <ol id="all-stories-list" class="stories-list"></ol>
+
+  <!--Favorite stories list-->
+  <ol id="favorite-stories" class="favorite-list"></ol>
 
 </section>
 
@@ -96,7 +100,7 @@
     <button type="submit">create account</button>
   </form>
 
-
+<!-- story submit form -->
 <form action="#" id="newStory-form" class="account-form hidden" method="post">
   <h4>Add Story</h4>
   <div class="story-input">
