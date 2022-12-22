@@ -10,6 +10,7 @@ async function getAndShowStoriesOnStart() {
   $storiesLoadingMsg.remove();
 
   putStoriesOnPage();
+  updateMyStories();
 }
 
 /**
@@ -20,12 +21,12 @@ async function getAndShowStoriesOnStart() {
  */
 
 function generateStoryMarkup(story) {
-  // console.debug("generateStoryMarkup", story);
+   console.debug("generateStoryMarkup", story);
 
   const hostName = story.getHostName();
   return $(`
       <li id="${story.storyId}">
-      <span class ="favorite">fav</span>
+      <a class ="favorite">fav</a>
         <a href="${story.url}" target="a_blank" class="story-link">
           ${story.title}
         </a>
@@ -38,12 +39,13 @@ function generateStoryMarkup(story) {
 
 /** Gets list of stories from server, generates their HTML, and puts on page. */
 
-function putStoriesOnPage() {
+async function putStoriesOnPage() {
   console.debug("putStoriesOnPage");
 
   $allStoriesList.empty();
 
   // loop through all of our stories and generate HTML for them
+  storyList = await StoryList.getStories()
   for (let story of storyList.stories) {
     const $story = generateStoryMarkup(story);
     $allStoriesList.append($story);
@@ -78,7 +80,7 @@ function putFavStoriesOnPage(){
   $favStoriesList.append(
     $(`
       <li id="${story.storyId}">
-      <span class ="delete">delete</span>
+      <a class ="delete">delete</a>
         <a href="${story.url}" target="a_blank" class="story-link">
           ${story.title}
         </a>
@@ -91,10 +93,39 @@ function putFavStoriesOnPage(){
   }
 }
 // evt handler for clicking on story to favorite
-$allStoriesList.on('click', '.favorite', async function(evt){
+$myStoriesList.on('click', '.favorite', async function(evt){
   let id = this.parentNode.id; await User.addFavStory(id)})
+
+  $allStoriesList.on('click', '.favorite', async function(evt){
+    let id = this.parentNode.id; await User.addFavStory(id)})
 
   // evt handler for clicking to delete story
 
   $favStoriesList.on('click', '.delete', async function(evt){
-    let id = this.parentNode.id; await User.removeStory(id)})
+    let id = this.parentNode.id; await User.removeFavStory(id)})
+
+    // adds users added stories to My stories list
+
+    function updateMyStories(){
+      $myStoriesList.empty()
+      for (let story of currentUser.ownStories){
+        const hostName = story.getHostName()
+        $myStoriesList.append(
+          (`
+      <li id="${story.storyId}">
+      <a class ="remove">rmv</a>
+      <a class ="favorite">fav</a>
+        <a href="${story.url}" target="a_blank" class="story-link">
+          ${story.title}
+        </a>
+        <small class="story-hostname">(${hostName})</small>
+        <small class="story-author">by ${story.author}</small>
+        <small class="story-user">posted by ${story.username}</small>
+      </li>
+    `)
+        )
+      }
+    }
+
+    $myStoriesList.on('click', '.remove', async function(evt){
+      let id = this.parentNode.id; await User.removeMyStory(id)})

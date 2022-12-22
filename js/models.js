@@ -233,7 +233,7 @@ class User {
   }
 
   // sends delete request to api,updates the dom
-  static async removeStory(id){
+  static async removeFavStory(id){
     const response = await axios({
       url:`https://hack-or-snooze-v3.herokuapp.com/users/${currentUser.username}/favorites/${id}`,
       method: "DELETE",
@@ -247,6 +247,23 @@ class User {
   }
   
 
+  static async removeMyStory(id){
+    const response = await axios({
+      url:`https://hack-or-snooze-v3.herokuapp.com/stories/${id}`,
+      method: "DELETE",
+       params:{ token: `${currentUser.loginToken}`},
+       
+  });
+  console.log(response)
+  currentUser.ownStories = []
+      for(let story of currentUser.ownStories){
+      currentUser.ownStories.push(new Story(story))}
+  updateMyStories()
+
 }
+
+}
+
+
 
 

@@ -1,10 +1,10 @@
 /* Lists of stories */
 
-.stories-list, .favorite-list {
+.stories-list, .favorite-list, .my-list {
   margin: 20px 5px;
 }
 
-.stories-list > li, .favorite-list > li {
+.stories-list > li, .favorite-list > li, .my-list > li {
   color: gray;
   font-size: 0.8rem;
   margin: 10px 0;
@@ -38,7 +38,7 @@
   display: block;
 }
 
-.favorite, .delete{
-  font-size: .5rem
+.favorite, .delete, .remove{
+  font-size: .8rem
 }
 
